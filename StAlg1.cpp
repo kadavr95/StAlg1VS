@@ -244,6 +244,7 @@ bool unitTesting(List *myList, int testNumber){
 void main()//main function
 {
 	short OperationCode=0;
+	int passedTests=0;
 	List *myList = new List();
 	int index;
 	char value, valueNext;
@@ -292,9 +293,9 @@ void main()//main function
 				cout<<"Enter value to search:\n";//value input
 				cin>>value;
 				if (myList->searchByKey(value)!=NULL)
-					cout<<"Element found\n";
+					cout<<"Element \""<<myList->searchByKey(value)<<"\" found\n";
 				else
-					cout<<"Element not found\n";
+					cout<<"Element \""<<myList->searchByKey(value)<<"\" not found\n";
 				cout<<"Done!\n";
 				break;
 			case 52://list output
@@ -311,14 +312,17 @@ void main()//main function
 			case 54://unit testing
 				cout<<"UNIT TESTING\n";
 				for (int i = 1; i < 100; i++) {
-					cout<<"Test "<<i<<": ";
+					cout<<"Test "<<setw(2)<<i<<": ";
 					if (unitTesting(myList, i)) {
 						cout<<"Passed\n";
+						passedTests++;
 					}
 					else{
 						cout<<"Failed\n";
 					}
 				}
+				cout<<"\nPassed tests: "<<passedTests<<"/100\n";
+				passedTests=0;
 				cout<<"Done!\n";
 				break;
 			case 57://show info about programme
