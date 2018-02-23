@@ -575,44 +575,44 @@ bool unitTesting(int testNumber){//auto testing if everything is working as inte
 			myCircularDoublyLinkedList->push(new Data('3'), '0');
 			myCircularDoublyLinkedList->push(new Data('4'), '0');
 			myCircularDoublyLinkedList->push(new Data('5'), '0');
-			if (myCircularDoublyLinkedList->pop(5)->data->value=='e'){
+			if (myCircularDoublyLinkedList->pop(5)->data->value=='e'){//it test passed
 				delete myCircularDoublyLinkedList;
 				return true;
 			}
-			else{
+			else{//if test failed
 				delete myCircularDoublyLinkedList;
 				return false;
 			}
 			break;
 		case 26://remove wrong element from list with 5 elements
-			myCircularDoublyLinkedList->push(new Data('1'), '0');
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
 			myCircularDoublyLinkedList->push(new Data('2'), '0');
 			myCircularDoublyLinkedList->push(new Data('3'), '0');
 			myCircularDoublyLinkedList->push(new Data('4'), '0');
 			myCircularDoublyLinkedList->push(new Data('5'), '0');
-			if (myCircularDoublyLinkedList->pop(6)->data->value==NULL){
+			if (myCircularDoublyLinkedList->pop(6)->data->value==NULL){//if test passed
 				delete myCircularDoublyLinkedList;
 				return true;
 			}
-			else{
+			else{//if test failed
 				delete myCircularDoublyLinkedList;
 				return false;
 			}
 			break;
 		case 27://print list with 5 elements
-			myCircularDoublyLinkedList->push(new Data('1'), '0');
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
 			myCircularDoublyLinkedList->push(new Data('2'), '0');
 			myCircularDoublyLinkedList->push(new Data('3'), '0');
 			myCircularDoublyLinkedList->push(new Data('4'), '0');
 			myCircularDoublyLinkedList->push(new Data('5'), '0');
-			std::cout.setstate(std::ios_base::failbit);
+			std::cout.setstate(std::ios_base::failbit);//suppressing console list printout
 			myCircularDoublyLinkedList->print(myCircularDoublyLinkedList->getHead());
-			std::cout.clear();
+			std::cout.clear();//removing suppression
 			delete myCircularDoublyLinkedList;
 			return true;
 			break;
 		case 28://destroy list with 5 elements
-			myCircularDoublyLinkedList->push(new Data('1'), '0');
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
 			myCircularDoublyLinkedList->push(new Data('2'), '0');
 			myCircularDoublyLinkedList->push(new Data('3'), '0');
 			myCircularDoublyLinkedList->push(new Data('4'), '0');
