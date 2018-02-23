@@ -687,7 +687,7 @@ void aboutProgramme()//show info about the programme
 	cout<<"Algorithms and data structures\n";
 	cout<<"Practical assignment #1\n";
 	cout<<"Variant GGA\n\n";
-	cout<<"Version 0.1.0.0 build 20180224010000\n\n";
+	cout<<"Version 0.1.0.1 build 20180224010000\n\n";
 	cout<<"Development and testing: Yaskovich Dmitry (ISBO-05-15)\n\n";
 	cout<<"Dimini Inc, 2018";
 }
