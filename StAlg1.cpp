@@ -691,4 +691,3 @@ void aboutProgramme()//show info about the programme
 	cout<<"Development and testing: Yaskovich Dmitry (ISBO-05-15)\n\n";
 	cout<<"Dimini Inc, 2018";
 }
-
