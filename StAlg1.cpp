@@ -100,9 +100,15 @@ public:
 	Item* pop(int index){
 		if (head!=NULL) {
 			Item* current = head;
+			if (index==0) {
+                return NULL;
+			}
 			while (index>1){
 				index--;
 				current=current->next;
+				if (current==head) {
+					return NULL;
+				}
 			}
 			current->previous->next=current->next;
 			current->next->previous=current->previous;
@@ -181,19 +187,54 @@ void userTest(){
 
 bool unitTesting(List *myList, int testNumber){
 	switch (testNumber) {
-		case 1:
+		case 1://push to empty
+
+			return true;
+			break;
+		case 2://remove from empty
+
+			return true;
+			break;
+		case 3:
+			return true;
+			break;
+		case 4:
+			return true;
+			break;
+		case 5:
+			return true;
+			break;
+		case 6:
+			return true;
+			break;
+		case 7:
+			return true;
+			break;
+		case 8:
+			return true;
+			break;
+		case 9:
+			return true;
+			break;
+		case 10:
+			return true;
+			break;
+		case 99:
 			for (int i = 0; i < 26000; i++) {
 				myList->push(new Data(i), 0);
 			}
+			for (int i = 0; i < 26000; i++) {
+				myList->pop(1);
+			}
 			return true;
 			break;
-		case 2:
+		case 100:
+			for (int i = 0; i < 26000; i++) {
+				myList->push(new Data(i), 0);
+			}
 			delete myList;
 			myList = new List();
 			return true;
-			//for (int i = 0; i < 26000; i++) {
-				//myList->pop(1);
-			//}
 			break;
 		default:
 			return false;
@@ -269,7 +310,7 @@ void main()//main function
 				break;
 			case 54://unit testing
 				cout<<"UNIT TESTING\n";
-				for (int i = 1; i < 10; i++) {
+				for (int i = 1; i < 100; i++) {
 					cout<<"Test "<<i<<": ";
 					if (unitTesting(myList, i)) {
 						cout<<"Passed\n";
@@ -313,7 +354,7 @@ void AboutProgramme()//show info about the programme
 	cout<<"Algorithms and data structures\n";
 	cout<<"Practical assignment #1\n";
 	cout<<"Variant GGA\n\n";
-	cout<<"Version 0.0.12.0 build 20180216003000\n\n";
+	cout<<"Version 0.0.13.0 build 20180216003000\n\n";
 	cout<<"Development and testing: Yaskovich Dmitry (ISBO-05-15)\n\n";
 	cout<<"Dimini Inc, 2018";
 }
