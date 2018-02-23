@@ -116,7 +116,7 @@ public:
 			if (current==current->next) {//if element is the only one
 				head=NULL;//head reset
 			}
-			Node *currentTemporary= new Node(new Data(*current->data));//new temporary node to return
+			Node *currentTemporary= current->data;//new temporary node to return
 			Node *nullPointer = NULL;//new pointer to erase old data
 			delete current;//element and pointer destruction
 			current = nullPointer;
