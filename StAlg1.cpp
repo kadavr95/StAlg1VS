@@ -116,7 +116,7 @@ public:
 			if (current==current->next) {//if element is the only one
 				head=NULL;//head reset
 			}
-			Node* currentTemporary=current;//new temporary node to return
+			Node *currentTemporary= new Node(new Data(*current->data));//new temporary node to return
 			Node *nullPointer = NULL;//new pointer to erase old data
 			delete current;//element and pointer destruction
 			current = nullPointer;
@@ -351,7 +351,7 @@ bool unitTesting(int testNumber){//auto testing if everything is working as inte
 			break;
 		case 9://remove wrong element from list with 1 element
 			myCircularDoublyLinkedList->push(new Data('1'), '0');//node addition
-			if (myCircularDoublyLinkedList->pop(2)->data->value==NULL){//if test passed
+			if (myCircularDoublyLinkedList->pop(2)==NULL){//if test passed
 				delete myCircularDoublyLinkedList;
 				return true;
 			}
@@ -449,7 +449,7 @@ bool unitTesting(int testNumber){//auto testing if everything is working as inte
 		case 17://remove wrong element from list with 2 elements
 			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
 			myCircularDoublyLinkedList->push(new Data('2'), '0');
-			if (myCircularDoublyLinkedList->pop(3)->data->value==NULL){//if test passed
+			if (myCircularDoublyLinkedList->pop(3)==NULL){//if test passed
 				delete myCircularDoublyLinkedList;
 				return true;
 			}
@@ -590,7 +590,7 @@ bool unitTesting(int testNumber){//auto testing if everything is working as inte
 			myCircularDoublyLinkedList->push(new Data('3'), '0');
 			myCircularDoublyLinkedList->push(new Data('4'), '0');
 			myCircularDoublyLinkedList->push(new Data('5'), '0');
-			if (myCircularDoublyLinkedList->pop(6)->data->value==NULL){//if test passed
+			if (myCircularDoublyLinkedList->pop(6)==NULL){//if test passed
 				delete myCircularDoublyLinkedList;
 				return true;
 			}
@@ -687,7 +687,7 @@ void aboutProgramme()//show info about the programme
 	cout<<"Algorithms and data structures\n";
 	cout<<"Practical assignment #1\n";
 	cout<<"Variant GGA\n\n";
-	cout<<"Version 0.1.0.1 build 20180224010000\n\n";
+	cout<<"Version 0.1.2.0 build 20180224014500\n\n";
 	cout<<"Development and testing: Yaskovich Dmitry (ISBO-05-15)\n\n";
 	cout<<"Dimini Inc, 2018";
 }
