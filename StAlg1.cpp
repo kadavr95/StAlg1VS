@@ -4,284 +4,203 @@
 #include <conio.h>//getch
 #include <iomanip>//string comparison
 #include <windows.h>//localization
+#include <stdlib.h>//random
+#include <time.h>//time
 
-class Data{
+class Data{//class of list nodes' data
 	int key;
 
 public:
 	char value;
 
-	Data(int key){
+	Data(int key){//constructor
 		this->key = key;
-		// вариативно
-		//value = (char)(key + 'a');
-		value = (char)key;
+		value = (char)(key + '0');//just another magic value generator
 	}
 
-	int getKey(){
+	int getKey(){//key getter
 		return key;
 	}
 };
 
-class Item{
+class Node{//class of list node
 
 public:
     Data *data;
-	Item *next;
-	Item *previous;
+	Node *next;
+	Node *previous;
 
-    Item(Data *data){
+	Node(Data *data){//constructor
         this->data = data;
 		this->next = NULL;
 		this->previous = NULL;
 	}
 
-    ~Item(){
+	~Node(){//destructor
 		delete data;
 	}
 };
 
-class List{
-	Item *head;
+class CircularDoublyLinkedList{//class of circular doubly linked list
+	Node *head;
 
 public:
-    List(){
-        head = NULL;
+	CircularDoublyLinkedList(){//constructor
+		head = NULL;//setting head to default NULL value
 	}
 
-	Item* getHead(){
+	Node* getHead(){//head address getter
 		return head;
 	}
 
-	void print(Item* current){
-		if (!List::isEmpty()) {
-			cout << current->data->value << "\n";
-			if (!(current->next == head)) {
+	void print(Node* current){//list printout
+		if (!CircularDoublyLinkedList::isEmpty()) {//if list is not empty
+			cout << current->data->value << "\n";//printing value
+			if (!(current->next == head)) {//moving to next element
 				print(current->next);
 			}
-		//переход к следующему элементу
 		}
-		else
+		else//if list is empty
 			cout << "\n";
-		//std::cout << "Только здесь может быть вывод в консоль";
 	}
 
-	void push(Data *newData, char nextData){
+	void push(Data *newData, char nextData){//addition to list
 		Data *data = newData;
-		if (List::isEmpty()) {
-			Item *newItem = new Item(data);
-			head = newItem;
-			newItem->next = head;
-			newItem->previous = head;
+		if (CircularDoublyLinkedList::isEmpty()) {//if list is empty
+			Node *newNode = new Node(data);//node creation
+			head = newNode;//head and neighbours links setting
+			newNode->next = head;
+			newNode->previous = head;
 		}
-		else{
-			if (!(List::searchByKey(nextData)==NULL)) {
-				Item *current = List::searchByKey(nextData);
-                Item *newItem = new Item(data);
-				current->previous->next = newItem;
-				newItem->next = current;
-				newItem->previous=current->previous;
-				current->previous = newItem;
-				if (current == head) {
-					head=newItem;
+		else{//if list is not empty
+			Node *current = CircularDoublyLinkedList::searchByKey(nextData);//search presence of element to insert before it
+			if (current!=NULL) {//if addition before element
+				Node *newNode = new Node(data);//new node creation
+				current->previous->next = newNode;//new node and neighbours nodes links rerouting
+				newNode->next = current;
+				newNode->previous=current->previous;
+				current->previous = newNode;
+				if (current == head) {//if insert to the first place
+					head=newNode;//head adjustment
 				}
 			}
-			else{
-				Item *newItem = new Item(data);
-				head->previous->next = newItem;
-				newItem->next = head;
-				newItem->previous=head->previous;
-				head->previous = newItem;
+			else{//if addition to the tail
+				Node *newNode = new Node(data);//new node creation
+				head->previous->next = newNode;//new node and neighbours nodes links rerouting
+				newNode->next = head;
+				newNode->previous=head->previous;
+				head->previous = newNode;
 			}
-
 		}
 	}
 
-	Item* pop(int index){
-		if (head!=NULL) {
-			Item* current = head;
-			if (index==0) {
-                return NULL;
+	Node* pop(int index){//deletion from list
+		if (head!=NULL) {//if list is not empty
+			Node* current = head;
+			if (index<=0) {//deny indeces lesser than one
+				return NULL;
 			}
-			while (index>1){
+			while (index>1) {//jumping to element we want to delete
 				index--;
 				current=current->next;
-				if (current==head) {
+				if (current==head) {//deny indeces greater than quantity of list elements
 					return NULL;
 				}
 			}
-			current->previous->next=current->next;
+			current->previous->next=current->next;//rerouting neighbours nodes
 			current->next->previous=current->previous;
-			if (head==current) {
-				head=current->next;
+			if (head==current) {//if element to delete is head
+				head=current->next;//head adjustment
 			}
-			if (current==current->next) {
-				head=NULL ;
+			if (current==current->next) {//if element is the only one
+				head=NULL;//head reset
 			}
-			Item* current2=current;
-			Item *p_var = NULL;
-			delete current;
-			current = p_var;
-			return current2;
-		 }
-		 return NULL;
+			Node* currentTemporary=current;//new temporary node to return
+			Node *nullPointer = NULL;//new pointer to erase old data
+			delete current;//element and pointer destruction
+			current = nullPointer;
+			return currentTemporary;
+		}
+		return NULL;//if list is empty
 	}
 
-	bool isEmpty(){
-		if (head == NULL)
+	bool isEmpty(){//check if list is empty
+		if (head == NULL)//if empty
 			return true;
-		else
+		else//if not empty
 			return false;
 	}
 
-	Item* searchByKey(char key){
-		Item *current = head;
-		if (!(head == NULL)) {
-			while (true)
+	Node* searchByKey(char key){//search element by value
+		Node *current = head;//set head as current
+		if (head != NULL) {//if list is not empty
+			while (true)//unlimited recursion
 			{
-				if (current->data->value ==  key)
+				if (current->data->value ==  key)//if element is found
 					return current;
-				if (current->next == head) {
+				if (current->next == head) {//if all list was checked
 					return NULL;
 				}
-				current=current->next;
+				current=current->next;//jump to next element
 			}
 		}
-		return NULL;
+		return NULL;//if list is empty;
 	}
 
-	~List(){
-		if (!List::isEmpty()) {
-			Item *last = head->previous;
-			Item *nextLast = NULL;
-			while (last!=head) {
-				nextLast=last->previous;
-				delete last;
-				last=nextLast;
+	~CircularDoublyLinkedList(){//destructor
+		if (!CircularDoublyLinkedList::isEmpty()) {//if list is not empty
+			Node *last = head->previous;//set last and penultimate element
+			Node *nextLast = NULL;
+			while (last!=head) {//while element has more than one element
+				nextLast=last->previous;//save link to penultimate element
+				delete last;//delete last element
+				last=nextLast;//set new last element
 			}
-			delete last;
-			head=NULL;
+			delete last;//deletion of last element in list
+			head=NULL;//head reset
 		}
 	}
 };
 
 //functions prototypes
-void OutputMainMenu();//menu and info
-void AboutProgramme();
+void outputMainMenu();//menu and info
+void aboutProgramme();//about programme
+bool unitTesting(int testNumber);//unit testing
 
-void userTest(){
-	List myList;
-    int command = 1;
-    while (command != 0)
-    {
-        std::cout << "input 1, if you want print.....";
-        std::cin >> command;
-        switch(command){
-            case 1:{
-				//myList.print(myList.getHead());
-				break;
-			}
-        }
-    }
-}
-
-bool unitTesting(List *myList, int testNumber){
-	switch (testNumber) {
-		case 1://push to empty
-
-			return true;
-			break;
-		case 2://remove from empty
-
-			return true;
-			break;
-		case 3:
-			return true;
-			break;
-		case 4:
-			return true;
-			break;
-		case 5:
-			return true;
-			break;
-		case 6:
-			return true;
-			break;
-		case 7:
-			return true;
-			break;
-		case 8:
-			return true;
-			break;
-		case 9:
-			return true;
-			break;
-		case 10:
-			return true;
-			break;
-		case 99:
-			for (int i = 0; i < 26000; i++) {
-				myList->push(new Data(i), 0);
-			}
-			for (int i = 0; i < 26000; i++) {
-				myList->pop(1);
-			}
-			return true;
-			break;
-		case 100:
-			for (int i = 0; i < 26000; i++) {
-				myList->push(new Data(i), 0);
-			}
-			delete myList;
-			myList = new List();
-			return true;
-			break;
-		default:
-			return false;
-	}
-}
+const int TESTS_NUMBER=33;//number of units tests
 
 void main()//main function
 {
-	short OperationCode=0;
-	int passedTests=0;
-	List *myList = new List();
+	short operationCode=0, passedTests=0;
+	CircularDoublyLinkedList *myCircularDoublyLinkedList = new CircularDoublyLinkedList();
 	int index;
 	char value, valueNext;
-	Data *data = new Data(2);
-	Data *data2 = new Data(4);
-	Item *it1 = new Item(data);
-	Item *it2 = new Item(data2);
-	it1->next = it2;
-	Item *current = it1;
+	Node *current;
+	srand (time(NULL));//initialization of random seed
 	SetConsoleOutputCP(1251);//console localization
 	SetConsoleCP(1251);
-	OutputMainMenu();//show menu of available commands
-	while(OperationCode!=48)//repeat until exit
+	outputMainMenu();//show menu of available commands
+	while(operationCode!=48)//repeat until exit
 	{
-		OperationCode=getch();//get command
+		operationCode=getch();//get command
 		system("cls");//clear console screen
-		switch (OperationCode)//command choice
+		switch (operationCode)//command choice
 		{
 			case 49://push to list
 				cout<<"ADD TO LIST\n";
-				if (myList->isEmpty()) {
-				   myList = new List(); 
-				}
 				cout<<"Enter value to push:\n";//value input
 				cin>>value;
-				cout<<"Enter value of element before which will be pushed new element:\n";//value input
+				cout<<"Enter value of element before which will be pushed new element:\n";//next element value input
 				cin>>valueNext;
-				data = new Data(value);
-				myList->push(data, valueNext);
+				myCircularDoublyLinkedList->push(new Data(value), valueNext);//node addition
 				cout<<"Done!\n";
 				break;
 			case 50://pop from list
 				cout<<"REMOVE FROM LIST\n";
 				cout<<"Enter index to remove:\n";//index input
 				cin>>index;
-				current=myList->pop(index);
-				if (current!=NULL) {
+				current=myCircularDoublyLinkedList->pop(index);//node deletion
+				if (current!=NULL) {//check if deletion was successful
 					cout<<"Element \""<<current->data->value<<"\" was successfully removed\n";
 				}
 				else
@@ -292,49 +211,228 @@ void main()//main function
 				cout<<"SEARCH IN LIST\n";
 				cout<<"Enter value to search:\n";//value input
 				cin>>value;
-				if (myList->searchByKey(value)!=NULL)
-					cout<<"Element \""<<myList->searchByKey(value)<<"\" found\n";
+				if (myCircularDoublyLinkedList->searchByKey(value)!=NULL)
+					cout<<"Element \""<<myCircularDoublyLinkedList->searchByKey(value)<<"\" found\n";
 				else
-					cout<<"Element \""<<myList->searchByKey(value)<<"\" not found\n";
+					cout<<"Element \""<<myCircularDoublyLinkedList->searchByKey(value)<<"\" not found\n";
 				cout<<"Done!\n";
 				break;
 			case 52://list output
 				cout<<"LIST PRINTOUT\n";
-				myList->print(myList->getHead());
+				myCircularDoublyLinkedList->print(myCircularDoublyLinkedList->getHead());
 				cout<<"Done!\n";
 				break;
 			case 53://list destruction
 				cout<<"LIST DESTRUСTION!\n";
-				delete myList;
-				myList = new List();
+				delete myCircularDoublyLinkedList;
+				myCircularDoublyLinkedList = new CircularDoublyLinkedList();
 				cout<<"Done!\n";
 				break;
 			case 54://unit testing
 				cout<<"UNIT TESTING\n";
-				for (int i = 1; i < 100; i++) {
-					cout<<"Test "<<setw(2)<<i<<": ";
-					if (unitTesting(myList, i)) {
+				for (int i = 0; i < TESTS_NUMBER; ) {//go through all tests
+					i++;//go to next test
+					cout<<"Test "<<setw(2)<<i<<": ";//print test number
+					if (unitTesting(i)) {//if current test passed
 						cout<<"Passed\n";
-						passedTests++;
+						passedTests++;//increase quantity of passed tests
 					}
-					else{
+					else{//if current test failed
 						cout<<"Failed\n";
 					}
 				}
-				cout<<"\nPassed tests: "<<passedTests<<"/100\n";
-				passedTests=0;
+				cout<<"\nPassed tests: "<<passedTests<<"/"<<TESTS_NUMBER<<"\n";//print summary
+				passedTests=0;//reset passed tests quantity
 				cout<<"Done!\n";
 				break;
 			case 57://show info about programme
-				AboutProgramme();
+				aboutProgramme();
 				break;
 			case 48://programme shut down
-				delete myList;
+				delete myCircularDoublyLinkedList;//delete list
 				exit;
 				break;
 			default://case of pressing button not assigned to commands
-				OutputMainMenu();//show menu of available commands
+				outputMainMenu();//show menu of available commands
 		}
+	}
+}
+
+bool unitTesting(int testNumber){//auto testing if everything is working as intended
+	int value, valueSecond;
+	char valueNext;
+	Node *current;
+	CircularDoublyLinkedList *myCircularDoublyLinkedList = new CircularDoublyLinkedList();
+	switch (testNumber) {
+		case 1://add to empty list
+			value=rand() % 1000 + 1;
+			valueNext=rand() % 1000 + 1;
+			myCircularDoublyLinkedList->push(new Data(value), valueNext);
+			if (myCircularDoublyLinkedList->searchByKey(value)==NULL){
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
+			break;
+		case 2://remove from empty list
+			if (myCircularDoublyLinkedList->pop(rand() % 1000 + 1)==NULL){
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
+			break;
+		case 3://search in empty list
+			if (myCircularDoublyLinkedList->searchByKey(rand() % 1000 + 1)==NULL){
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
+			break;
+		case 4://print empty list
+			std::cout.setstate(std::ios_base::failbit);
+			myCircularDoublyLinkedList->print(myCircularDoublyLinkedList->getHead());
+			std::cout.clear();
+			delete myCircularDoublyLinkedList;
+			return true;
+			break;
+		case 5://destroy empty list
+			delete myCircularDoublyLinkedList;
+			return true;
+			break;
+		case 6://add to list with 1 element before this element
+			value=rand() % 1000 + 1;
+			valueSecond=rand()%1000+1;
+			valueNext=rand() % 1000 + 1;
+			myCircularDoublyLinkedList->push(new Data(value), valueNext);
+			myCircularDoublyLinkedList->push(new Data(valueSecond), value);
+
+			if (myCircularDoublyLinkedList->searchByKey(value)==NULL){
+				delete myCircularDoublyLinkedList;
+				myCircularDoublyLinkedList = new CircularDoublyLinkedList();
+				return true;
+			}
+			else{
+				delete myCircularDoublyLinkedList;
+				myCircularDoublyLinkedList = new CircularDoublyLinkedList();
+				return false;
+			}
+			break;
+		case 7://add to list with 1 element to the end
+			return true;
+			break;
+		case 8://remove from list with 1 element
+			return true;
+			break;
+		case 9://remove wrong element from list with 1 element
+			return true;
+			break;
+		case 10://print list with 1 element
+			return true;
+			break;
+		case 11://destroy list with 1 element
+			return true;
+			break;
+		case 12://add to list with 2 elements before first element
+			return true;
+			break;
+		case 13://add to list with 2 elements before second element
+			return true;
+			break;
+		case 14://add to list with 2 elements to the end
+			return true;
+			break;
+		case 15://remove first element from list with 2 elements
+			return true;
+			break;
+		case 16://remove last element from list with 2 elements
+			return true;
+			break;
+		case 17://remove wrong element from list with 2 elements
+			return true;
+			break;
+		case 18://print list with 2 elements
+			return true;
+			break;
+		case 19://destroy list with 2 elements
+			return true;
+			break;
+		case 20://add to list with 10 elements before first element
+			return true;
+			break;
+		case 21://add to list with 10 elements in the middle of list
+			return true;
+			break;
+		case 22://add to list with 10 elements to the end
+			return true;
+			break;
+		case 23://remove first element from list with 10 elements
+			return true;
+			break;
+		case 24://remove element from the middle of the list with 10 elements
+			return true;
+			break;
+		case 25://remove last element from list with 10 elements
+			return true;
+			break;
+		case 26://remove wrong element from list with 10 elements
+			return true;
+			break;
+		case 27://print list with 10 elements
+			return true;
+			break;
+		case 28://destroy list with 10 elements
+			return true;
+			break;
+		case 29://add thousands of elements and delete them
+			for (int i = 0; i < 26000; i++) {
+				myCircularDoublyLinkedList->push(new Data(i), 0);
+			}
+			for (int i = 0; i < 26000; i++) {
+				myCircularDoublyLinkedList->pop(1);
+			}
+			return true;
+			break;
+		case 30://add and delete thousands of elements
+			for (int i = 0; i < 26000; i++) {
+				myCircularDoublyLinkedList->push(new Data(i), 0);
+				myCircularDoublyLinkedList->pop(1);
+			}
+			return true;
+			break;
+		case 31://add element to list and destroy it thousands of times
+			for (int i = 0; i < 26000; i++) {
+				myCircularDoublyLinkedList->push(new Data(i), 0);
+				delete myCircularDoublyLinkedList;
+				myCircularDoublyLinkedList = new CircularDoublyLinkedList();
+			}
+			return true;
+			break;
+		case 32://add thousand of elements and destroy list
+			for (int i = 0; i < 26000; i++) {
+				myCircularDoublyLinkedList->push(new Data(i), 0);
+			}
+			delete myCircularDoublyLinkedList;
+			myCircularDoublyLinkedList = new CircularDoublyLinkedList();
+			return true;
+			break;
+		case 33:
+			for (int i = 0; i < 26000; i++) {
+				myCircularDoublyLinkedList->push(new Data(rand() % 1000 + 1), rand() % 1000 + 1);
+				myCircularDoublyLinkedList->pop(rand() % 1000 + 1);
+			}
+			return true;
+			break;
+		default:
+			return false;
 	}
 }
 
@@ -358,7 +456,8 @@ void AboutProgramme()//show info about the programme
 	cout<<"Algorithms and data structures\n";
 	cout<<"Practical assignment #1\n";
 	cout<<"Variant GGA\n\n";
-	cout<<"Version 0.0.13.0 build 20180216003000\n\n";
+	cout<<"Version 0.1.0.0 build 20180224010000\n\n";
 	cout<<"Development and testing: Yaskovich Dmitry (ISBO-05-15)\n\n";
 	cout<<"Dimini Inc, 2018";
 }
+
