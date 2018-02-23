@@ -6,6 +6,7 @@
 #include <windows.h>//localization
 #include <stdlib.h>//random
 #include <time.h>//time
+#include <string>//strings
 
 class Data{//class of list nodes' data
 	int key;
@@ -259,48 +260,49 @@ void main()//main function
 }
 
 bool unitTesting(int testNumber){//auto testing if everything is working as intended
-	int value, valueSecond;
+	int value, valueSecond;//initializing variables
 	char valueNext;
 	Node *current;
+	string listString="";
 	CircularDoublyLinkedList *myCircularDoublyLinkedList = new CircularDoublyLinkedList();
 	switch (testNumber) {
 		case 1://add to empty list
-			value=rand() % 1000 + 1;
+			value=rand() % 1000 + 1;//generate random values
 			valueNext=rand() % 1000 + 1;
-			myCircularDoublyLinkedList->push(new Data(value), valueNext);
-			if (myCircularDoublyLinkedList->searchByKey(value)==NULL){
+			myCircularDoublyLinkedList->push(new Data(value), valueNext);//node addition
+			if (myCircularDoublyLinkedList->searchByKey(value)==NULL){//if test passed
 				delete myCircularDoublyLinkedList;
 				return true;
 			}
-			else{
+			else{//if test failed
 				delete myCircularDoublyLinkedList;
 				return false;
 			}
 			break;
 		case 2://remove from empty list
-			if (myCircularDoublyLinkedList->pop(rand() % 1000 + 1)==NULL){
+			if (myCircularDoublyLinkedList->pop(rand() % 1000 + 1)==NULL){//if test passed
 				delete myCircularDoublyLinkedList;
 				return true;
 			}
-			else{
+			else{//if test failed
 				delete myCircularDoublyLinkedList;
 				return false;
 			}
 			break;
 		case 3://search in empty list
-			if (myCircularDoublyLinkedList->searchByKey(rand() % 1000 + 1)==NULL){
+			if (myCircularDoublyLinkedList->searchByKey(rand() % 1000 + 1)==NULL){//if test passed
 				delete myCircularDoublyLinkedList;
 				return true;
 			}
-			else{
+			else{//if test failed
 				delete myCircularDoublyLinkedList;
 				return false;
 			}
 			break;
 		case 4://print empty list
-			std::cout.setstate(std::ios_base::failbit);
+			std::cout.setstate(std::ios_base::failbit);//suppressing console list printout
 			myCircularDoublyLinkedList->print(myCircularDoublyLinkedList->getHead());
-			std::cout.clear();
+			std::cout.clear();//removing suppression
 			delete myCircularDoublyLinkedList;
 			return true;
 			break;
@@ -309,87 +311,313 @@ bool unitTesting(int testNumber){//auto testing if everything is working as inte
 			return true;
 			break;
 		case 6://add to list with 1 element before this element
-			value=rand() % 1000 + 1;
-			valueSecond=rand()%1000+1;
-			valueNext=rand() % 1000 + 1;
-			myCircularDoublyLinkedList->push(new Data(value), valueNext);
-			myCircularDoublyLinkedList->push(new Data(valueSecond), value);
-
-			if (myCircularDoublyLinkedList->searchByKey(value)==NULL){
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), 'a');
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;//getting nodes values
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			if (listString=="ba"){//if test passed
 				delete myCircularDoublyLinkedList;
-				myCircularDoublyLinkedList = new CircularDoublyLinkedList();
 				return true;
 			}
-			else{
+			else{//it test failed
 				delete myCircularDoublyLinkedList;
-				myCircularDoublyLinkedList = new CircularDoublyLinkedList();
 				return false;
 			}
 			break;
 		case 7://add to list with 1 element to the end
-			return true;
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;//getting nodes values
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			if (listString=="ab"){//if test passed
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{//if test failed
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
 			break;
 		case 8://remove from list with 1 element
-			return true;
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//node addition
+			if (myCircularDoublyLinkedList->pop(1)->data->value=='a'){//if test passed
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{//if test failed
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
 			break;
 		case 9://remove wrong element from list with 1 element
-			return true;
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//node addition
+			if (myCircularDoublyLinkedList->pop(2)->data->value==NULL){//if test passed
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{//if test failed
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
 			break;
 		case 10://print list with 1 element
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//node addition
+			std::cout.setstate(std::ios_base::failbit);//suppressing console list printout
+			myCircularDoublyLinkedList->print(myCircularDoublyLinkedList->getHead());
+			std::cout.clear();//removing suppression
+			delete myCircularDoublyLinkedList;
 			return true;
 			break;
 		case 11://destroy list with 1 element
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//node addition
+			delete myCircularDoublyLinkedList;
 			return true;
 			break;
 		case 12://add to list with 2 elements before first element
-			return true;
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			myCircularDoublyLinkedList->push(new Data('3'), 'a');
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;//nodes deletion
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			if (listString=="cab"){//if test passed
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{//if test failed
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
 			break;
 		case 13://add to list with 2 elements before second element
-			return true;
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			myCircularDoublyLinkedList->push(new Data('3'), 'b');
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;//nodes deletion
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			if (listString=="acb"){//if test passed
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{//if test failed
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
 			break;
 		case 14://add to list with 2 elements to the end
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			myCircularDoublyLinkedList->push(new Data('3'), '0');
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;//nodes deletion
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			if (listString=="abc"){//if test passed
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{//if test failed
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
 			return true;
 			break;
 		case 15://remove first element from list with 2 elements
-			return true;
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			if (myCircularDoublyLinkedList->pop(1)->data->value=='a'){//if test passed
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{//if test failed
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
 			break;
 		case 16://remove last element from list with 2 elements
-			return true;
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			if (myCircularDoublyLinkedList->pop(2)->data->value=='b'){//if test passed
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{//if test failed
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
 			break;
 		case 17://remove wrong element from list with 2 elements
-			return true;
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			if (myCircularDoublyLinkedList->pop(3)->data->value==NULL){//if test passed
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{//if test failed
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
 			break;
 		case 18://print list with 2 elements
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			std::cout.setstate(std::ios_base::failbit);//suppressing console list printout
+			myCircularDoublyLinkedList->print(myCircularDoublyLinkedList->getHead());
+			std::cout.clear();//removing suppression
+			delete myCircularDoublyLinkedList;
 			return true;
 			break;
 		case 19://destroy list with 2 elements
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			delete myCircularDoublyLinkedList;
 			return true;
 			break;
-		case 20://add to list with 10 elements before first element
+		case 20://add to list with 5 elements before first element
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			myCircularDoublyLinkedList->push(new Data('3'), '0');
+			myCircularDoublyLinkedList->push(new Data('4'), '0');
+			myCircularDoublyLinkedList->push(new Data('5'), '0');
+			myCircularDoublyLinkedList->push(new Data('6'), 'a');
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;//nodes deletion
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			if (listString=="fabcde"){//if test passed
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{//if test failed
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
+			break;
+		case 21://add to list with 5 elements in the middle of list
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			myCircularDoublyLinkedList->push(new Data('3'), '0');
+			myCircularDoublyLinkedList->push(new Data('4'), '0');
+			myCircularDoublyLinkedList->push(new Data('5'), '0');
+			myCircularDoublyLinkedList->push(new Data('6'), 'd');
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;//nodes deletion
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			if (listString=="abcfde"){//if test passed
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{//if test failed
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
+			break;
+		case 22://add to list with 5 elements to the end
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			myCircularDoublyLinkedList->push(new Data('3'), '0');
+			myCircularDoublyLinkedList->push(new Data('4'), '0');
+			myCircularDoublyLinkedList->push(new Data('5'), '0');
+			myCircularDoublyLinkedList->push(new Data('6'), '0');
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;//nodes deletion
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			listString+=myCircularDoublyLinkedList->pop(1)->data->value;
+			if (listString=="abcdef"){//if test passed
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{//if test failed
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
+			break;
+		case 23://remove first element from list with 5 elements
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			myCircularDoublyLinkedList->push(new Data('3'), '0');
+			myCircularDoublyLinkedList->push(new Data('4'), '0');
+			myCircularDoublyLinkedList->push(new Data('5'), '0');
+			if (myCircularDoublyLinkedList->pop(1)->data->value=='a'){//if test passed
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{//if test failed
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
+			break;
+		case 24://remove element from the middle of the list with 5 elements
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			myCircularDoublyLinkedList->push(new Data('3'), '0');
+			myCircularDoublyLinkedList->push(new Data('4'), '0');
+			myCircularDoublyLinkedList->push(new Data('5'), '0');
+			if (myCircularDoublyLinkedList->pop(3)->data->value=='c'){//if test passed
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{//if test failed
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
+			break;
+		case 25://remove last element from list with 5 elements
+			myCircularDoublyLinkedList->push(new Data('1'), '0');//nodes addition
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			myCircularDoublyLinkedList->push(new Data('3'), '0');
+			myCircularDoublyLinkedList->push(new Data('4'), '0');
+			myCircularDoublyLinkedList->push(new Data('5'), '0');
+			if (myCircularDoublyLinkedList->pop(5)->data->value=='e'){
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
+			break;
+		case 26://remove wrong element from list with 5 elements
+			myCircularDoublyLinkedList->push(new Data('1'), '0');
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			myCircularDoublyLinkedList->push(new Data('3'), '0');
+			myCircularDoublyLinkedList->push(new Data('4'), '0');
+			myCircularDoublyLinkedList->push(new Data('5'), '0');
+			if (myCircularDoublyLinkedList->pop(6)->data->value==NULL){
+				delete myCircularDoublyLinkedList;
+				return true;
+			}
+			else{
+				delete myCircularDoublyLinkedList;
+				return false;
+			}
+			break;
+		case 27://print list with 5 elements
+			myCircularDoublyLinkedList->push(new Data('1'), '0');
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			myCircularDoublyLinkedList->push(new Data('3'), '0');
+			myCircularDoublyLinkedList->push(new Data('4'), '0');
+			myCircularDoublyLinkedList->push(new Data('5'), '0');
+			std::cout.setstate(std::ios_base::failbit);
+			myCircularDoublyLinkedList->print(myCircularDoublyLinkedList->getHead());
+			std::cout.clear();
+			delete myCircularDoublyLinkedList;
 			return true;
 			break;
-		case 21://add to list with 10 elements in the middle of list
-			return true;
-			break;
-		case 22://add to list with 10 elements to the end
-			return true;
-			break;
-		case 23://remove first element from list with 10 elements
-			return true;
-			break;
-		case 24://remove element from the middle of the list with 10 elements
-			return true;
-			break;
-		case 25://remove last element from list with 10 elements
-			return true;
-			break;
-		case 26://remove wrong element from list with 10 elements
-			return true;
-			break;
-		case 27://print list with 10 elements
-			return true;
-			break;
-		case 28://destroy list with 10 elements
+		case 28://destroy list with 5 elements
+			myCircularDoublyLinkedList->push(new Data('1'), '0');
+			myCircularDoublyLinkedList->push(new Data('2'), '0');
+			myCircularDoublyLinkedList->push(new Data('3'), '0');
+			myCircularDoublyLinkedList->push(new Data('4'), '0');
+			myCircularDoublyLinkedList->push(new Data('5'), '0');
+			delete myCircularDoublyLinkedList;
 			return true;
 			break;
 		case 29://add thousands of elements and delete them
@@ -399,6 +627,7 @@ bool unitTesting(int testNumber){//auto testing if everything is working as inte
 			for (int i = 0; i < 26000; i++) {
 				myCircularDoublyLinkedList->pop(1);
 			}
+			delete myCircularDoublyLinkedList;
 			return true;
 			break;
 		case 30://add and delete thousands of elements
@@ -406,6 +635,7 @@ bool unitTesting(int testNumber){//auto testing if everything is working as inte
 				myCircularDoublyLinkedList->push(new Data(i), 0);
 				myCircularDoublyLinkedList->pop(1);
 			}
+			delete myCircularDoublyLinkedList;
 			return true;
 			break;
 		case 31://add element to list and destroy it thousands of times
@@ -414,29 +644,30 @@ bool unitTesting(int testNumber){//auto testing if everything is working as inte
 				delete myCircularDoublyLinkedList;
 				myCircularDoublyLinkedList = new CircularDoublyLinkedList();
 			}
+			delete myCircularDoublyLinkedList;
 			return true;
 			break;
-		case 32://add thousand of elements and destroy list
+		case 32://add thousands of elements and destroy list
 			for (int i = 0; i < 26000; i++) {
 				myCircularDoublyLinkedList->push(new Data(i), 0);
 			}
 			delete myCircularDoublyLinkedList;
-			myCircularDoublyLinkedList = new CircularDoublyLinkedList();
 			return true;
 			break;
-		case 33:
+		case 33://randomly add thousands of elements and delete them
 			for (int i = 0; i < 26000; i++) {
 				myCircularDoublyLinkedList->push(new Data(rand() % 1000 + 1), rand() % 1000 + 1);
 				myCircularDoublyLinkedList->pop(rand() % 1000 + 1);
 			}
+			delete myCircularDoublyLinkedList;
 			return true;
 			break;
-		default:
+		default://if unknown unit test number
 			return false;
 	}
 }
 
-void OutputMainMenu()//show menu of available commands in main menu
+void outputMainMenu()//show menu of available commands in main menu
 {
 	cout<<"MAIN MENU\n";
 	cout<<"Choose operation:\n";
@@ -450,7 +681,7 @@ void OutputMainMenu()//show menu of available commands in main menu
 	cout<<"Press 0 to exit";
 }
 
-void AboutProgramme()//show info about the programme
+void aboutProgramme()//show info about the programme
 {
 	cout<<"ABOUT PROGRAMME\n\n";
 	cout<<"Algorithms and data structures\n";
